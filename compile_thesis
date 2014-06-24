@@ -25,7 +25,18 @@ def clean():
 
 def process(path):
     """Compile and generate PDF file"""
-    print "Processing", path
+    print "Compiling the thesis..."
+    os.system("pdflatex -interaction=nonstopmode %s" % path)
+
+    idx = path.find('/')
+    aux_path = path
+    if idx != -1:
+        aux_path = path[idx+1:]
+
+    os.system("bibtex %s" % aux_path)
+    os.system("pdflatex -interaction=nonstopmode %s" % path)
+    os.system("pdflatex -interaction=nonstopmode %s" % path)
+    print "Done compiling thesis!"
 
 
 if __name__ == '__main__':

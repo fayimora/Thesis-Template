@@ -1,0 +1,36 @@
+#!/usr/local/bin/python
+
+# A script to compile the Thesis - Fayimora
+
+import argparse
+import os
+
+parser = argparse.ArgumentParser(description='Utility or compiling the thesis')
+parser.add_argument('-c', '--clean', action='store_true', default=False, help='Cleans the current directory')
+parser.add_argument('-p', '--process')
+
+args = parser.parse_args()
+
+temp_files = ['*.aux', '*.bbl', '*.blg', '*.d', '*.fls', '*.ilg', '*.ind', '*.toc*', '*.lot*', '*.lof*', '*.log', '*.idx', '*.out*', '*.nlo', '*.nls']
+
+
+def clean():
+    """Clean directory"""
+
+    print "Cleaning in progress..."
+    for f in temp_files:
+        os.system("rm %s" % f)
+    print "Done cleaning!"
+
+
+def process(path):
+    """Compile and generate PDF file"""
+    print "Processing", path
+
+
+if __name__ == '__main__':
+    if args.clean:
+        clean()
+    else:
+        process(args.process)
+

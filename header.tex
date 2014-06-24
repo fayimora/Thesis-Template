@@ -1,0 +1,34 @@
+%
+% A header that lets you compile a chapter by itself, or inside a larger document.
+% Adapted from http://stackoverflow.com/a/3655553/751077
+% Use \inbpdocument and \outbpdocument in your individual files, in place of \begin{document} and \end{document}.
+% In your main file, put in a \def \ismaindoc {} before including or importing anything.
+
+
+\ifx\ismaindoc\undefined
+    \newcommand{\inbpdocument}{
+        \def \ismaindoc {}
+        % Use this header if we are compiling by ourselves.
+        \documentclass[a4paper,12pt,twoside]{report}
+        \input{thesis.preamble.tex}
+        \normallinespacing
+        \begin{document}
+    }
+    \newcommand{\outbpdocument}[1]{
+      % Fake chapters so references aren't broken
+        \label{cha:introduction}
+        \label{cha:background}
+        \label{cha:data-classification}
+        \label{cha:topic-modelling}
+
+        \bibliographystyle{authordate1}
+        \bibliography{bibliography}
+        \end{document}
+    }
+\else
+    %If we're inside another document, no need to re-start the document.
+    \ifx\inbpdocument\undefined
+        \newcommand{\inbpdocument}{}
+        \newcommand{\outbpdocument}[1]{}
+    \fi
+\fi

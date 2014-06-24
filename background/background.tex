@@ -1,0 +1,165 @@
+\input{header}
+\inbpdocument
+
+\chapter{Background Theory}
+
+\label{ch:background}
+
+\section{Introduction}
+\label{sec:background-introduction}
+% In this chapter, we explain some concepts and take a look at some background work related to this
+% study. Firstly, we review some research in the use of the naive Bayes Classifier for text
+% classification. Then we take a look at some background in topic modelling, specifically the Latent
+% Dirichlet Allocation
+
+Automatic Text Classification or Text Categorisation is a rapidly growing field in Machine Learning
+and Natural Language Processing. This is mainly due to the amount of electronic data we currently
+generate. The main task is to assign one or more classes to a given text document. Some applications
+of text classification include \textit{Email Spam Detection} and \textit{Language Detection}. The
+former involves trying to distinguish spam emails from legitimate ones while the latter involves the
+identification of the language a document was written in.
+
+However, this study makes use of classification techniques for data filtration which involves
+removing irrelevant documents from a list of documents(similar to spam filtering) and topic
+modelling (extracting topics from a list of documents) and sentiment analysis (predicting the
+sentiment of the author of a document). This chapter explains a few background concepts and reviews
+some relevant research previously done in this area.
+
+\section{Na\"{i}ve Bayes Classifier}
+\label{sec:bg-naive-bayes}
+The Na\"{i}ve Bayes classifier is one of the simplest classifier that can be used and this is due to
+the fact that it is based on simple Bayes Theorem. It is a probabilistic classifier which assumes
+that all features of the documents are independent of each other. This means that if a document has
+features $f1$ and $f2$ (could be length of document, occurrence of words e.t.c), the
+existence of $f1$ has nothing to do with the existence of $f2$ and vice versa. This also means that
+it makes assumptions that may or may not be correct, hence the ``Na\"{i}ve'' in its name.
+
+Bayes theorem states that the probability of $A$ given $B$ is the probability of $B$ given $A$ times
+the probability of $A$ divided by the probability of $B$. Mathematically, this is written as:
+\begin{equation}
+  p(A|B) = \frac{p(B|A)p(A)}{p(B)}
+\end{equation}
+
+Applying this logic to text classification, the probability that a document $d_i \in D$ belongs to a
+class $c$ is denoted as:
+\begin{equation}
+  p(c|d_i) = \frac{p(d_i|c)p(c)}{p(d_i)}
+\end{equation}
+
+% TODO: Show the final equation for the naive bayes classifier
+Although other techniques like Maximum Entropy, Random Forests or Support Vector Machines tend to
+perform better, a naive Bayes classifier will require less memory and CPU cycles. Furthermore, it is
+computationally less complex and simpler to implement. With regard to
+performance,~\citet{huangLuLing2003} showed using multiple datasets from~\citet{blakeMerz1998} that
+the naive Bayes classifier in many cases performs as good as other complex classifiers
+and~\citet{zhang2004} goes further to explain why it performs well. Other studies have also found
+Bayesian classifiers to be effective without being affected by its simple independence
+assumption~\citep{langley1992analysis,manning2008}.
+
+The Na\"{i}ve Bayes classifier has been used in many text classification problems but one of its
+common applications which is relevant to tweet classification is email spam\footnote{irrelevant or
+unsolicited messages. They are typically to large numbers of users} filtering. A spam
+filter is a system that takes in text and decides whether or not it is
+spam. \citet{androutsopoulos2000learning} addressed this issue using a naive Bayes classifier. They
+trained the model using a predefined set of manually labelled messages. They were able to show that
+the naive Bayes classifier was capable of classifying messages with impressive accuracy and precision
+compared to the then common keyword based approach to classification. \citet{deshpande2007evaluation}
+also carried out a similar research and the results were equally impressive and similar.
+
+\section{Topic Modelling}
+\label{sec:bg-topic-modelling}
+Topic Modelling is a process by which abstract topics/themes are extracted from a collection of
+documents. This process is usually carried out with the aid of topic models, a suite of algorithms
+used for topic modelling. It has been applied in a variety of fields like Software Analysis
+where~\citet{linstead2009software} used topic modelling to find topics embedded in code
+and~\citet{gethers2010using} used topic modelling to capture coupling among
+classes.~\citet{kireyev2009applications} applied topic models on disaster related data from Twitter
+in an effort to determine what topics were discussed within the time span of a natural
+disaster.~\citet{hospedales2009markov} introduced a new topic model that can be used to analyze
+videos with complex and crowded scenes in other to discover regularities in the videos. A system
+built on such model will be able to answer a question like ``What interesting events happened in the
+last 5 hours''. Other fields include Audio Analysis~\citep{smaragdis2009topic}, Influence
+modelling~\citep{gerrish2009modeling}, Finance~\citep{doyle2009financial}, Writer
+Identification~\citep{bhardwaj2009writer} and many more.
+
+There are a number of topic models but the two main ones are \textbf{\textit{Latent Semantic
+Indexing}} (LSI) and \textbf{\textit{Latent Dirichlet Allocation}} (LDA) and we discuss them further
+in the following sections.
+
+
+\subsection{Latent Semantic Indexing}
+\label{sub:bg-lsa}
+Latent Semantic Indexing(LSI) \citep{hofmann1999probabilistic}, sometimes referred to as
+\textit{Latent Semantic Analysis}, is an indexing technique that leverages matrix-algebra
+computations\footnote{Specifically, it uses Singular Value Decomposition which is a factorization of
+a complex matrix. See \url{http://en.wikipedia.org/wiki/Singular_value_decomposition}} to identify
+any patterns in relationships between a collection of text documents. It works based on the
+assumption that words used in the same context tend to have homogeneous meanings
+\citep{deerwester1990indexing,dumais2004latent,landauer2006latent}. LSI, has been used mostly in
+Information Retrieval and Search Engine Optimisation where it tries to figure out what words in a
+web page are relevant to the web page even though they might not be used in that page. One of the
+main drawbacks the LSI model suffers from is ambiguity.
+
+Assuming we have two documents, one talking about Microsoft Office and the other talking about
+actual physical office space. How can the model differentiate between the two? Unfortunately, it is
+unable to differentiate between such topics and a significant step to solve this problem was made by
+\citet{hofmann1999probabilistic} who presented the probabilistic LSI model. \citet{blei2003latent}
+argues that while Hoffman's work is a very useful step towards using probabilistic models to model
+text, it is incomplete.
+
+\subsection{Latent Dirichlet Allocation}
+\label{sec:bg-lda}
+
+\begin{figure}[H]
+\begin{center}
+    \includegraphics[scale=1.5]{Figures/lda}
+\end{center}
+\caption{A graphical model representation of LDA (Courtesy: \url{http://victorfang.wordpress.com/2012/03/11/latent-dirichlet-allocation})}
+\label{fig:lda}
+\end{figure}
+
+Latent Dirichlet Allocation(LDA) is a generative\footnote{See
+\url{http://en.wikipedia.org/wiki/Generative_model}} and probabilistic model that can be used to
+automatically group words into topics and documents into a mixture of topics \citep{blei2003latent}.
+It works based on the assumption that each document contains one or more topics. Words can also
+exist in multiple topics as they actually do in natural language. In other to tackle the problem of
+ambiguity LSI suffers from, LDA takes a combination of all topics that seem relevant
+to a document in a corpora\footnote{Corpora is simply a large collection of documents} and compares
+that document to the topics in an effort to determine which topic is closer to the document.
+\Figref{fig:lda} shows a graphical model representation of Latent Dirichlet Allocation. The inner
+boxes represents the choice of topics and words within a document while the outer box represents the
+actual documents.
+
+\citet{hoffman2010online} developed a variant of LDA called Online LDA which uses variational
+Bayes as its posterior inference algorithm as opposed to Gibbs Sampling. It also allows the model to
+be updated with more data after initial training. During initial training, the entire corpora is
+observed/trained in batches rather than at once. \citet{asuncion2009smoothing} shows that although
+this model uses constant memory and it converges quicker, it still requires a full pass through the
+entire corpora. This makes it very slow when applied to large datasets.
+
+An oversimplified version of the algorithm is:\\
+\begin{algorithm}[H]
+  \While{model is yet to converge} {%
+    \KwData{$B =$ randomly selected mini-batch of documents\;}
+    \For{$b\in B$}{%
+      Estimate approximate posterior over what topics each word in each document came from;\\
+      Update posterior over topic distributions based on what words are believed to have come from
+      what topics;\\
+    }
+  }
+\end{algorithm}
+
+Most of the research done on social media data, especially Twitter, has been to detect usage and
+communities \citep{java2007we}. Nonetheless, recent research has started to look into the detection
+of topics in social media. \citet{kireyev2009applications} used LDA to extract topics/themes from a
+collection of disaster related tweets. \citet{zhao2011comparing} used LDA to compare news related
+tweets on Twitter with topics in The New York Times. They were also able to show that the standard
+LDA might not always work well on tweets and so they proposed a new model which is a slight variant
+of LDA. \citet{weng2010twitterrank} proposed an algorithm that leverages LDA to find topic-sensitive
+influential twitter users. \citet{lau2012line} presented an LDA-based model for detecting and
+tracking emerging trends/events on microblogs like Twitter.
+
+\outbpdocument{
+  \bibliographystyle{authordate1}
+  \bibliography{bibliography}
+}

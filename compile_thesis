@@ -19,7 +19,7 @@ def clean():
 
     print "Cleaning in progress..."
     for f in temp_files:
-        os.system("rm %s" % f)
+        os.system("rm -rf %s" % f)
     print "Done cleaning!"
 
 

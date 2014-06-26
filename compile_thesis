@@ -3,7 +3,7 @@
 # A script to compile the Thesis - Fayimora
 
 import argparse
-import os
+from os import system
 
 parser = argparse.ArgumentParser(description='Utility or compiling the thesis')
 parser.add_argument('-c', '--clean', action='store_true', default=False, help='Cleans the current directory')
@@ -19,23 +19,25 @@ def clean():
 
     print "Cleaning in progress..."
     for f in temp_files:
-        os.system("rm -rf %s" % f)
+        system("rm -rf %s" % f)
     print "Done cleaning!"
 
 
 def process(path):
     """Compile and generate PDF file"""
     print "Compiling the thesis..."
-    os.system("pdflatex -interaction=nonstopmode %s" % path)
+    system("pdflatex -interaction=nonstopmode %s" % path)
 
-    idx = path.find('/')
+    idx, move = path.find('/'), False
     aux_path = path
     if idx != -1:
-        aux_path = path[idx+1:]
+        aux_path, move = path[idx+1:], True
 
-    os.system("bibtex %s" % aux_path)
-    os.system("pdflatex -interaction=nonstopmode %s" % path)
-    os.system("pdflatex -interaction=nonstopmode %s" % path)
+    system("bibtex %s" % aux_path)
+    system("pdflatex -interaction=nonstopmode %s" % path)
+    system("pdflatex -interaction=nonstopmode %s" % path)
+    if move:
+        system("mv %s.pdf %s" % (aux_path, aux_path))
     print "Done compiling thesis!"
 
 

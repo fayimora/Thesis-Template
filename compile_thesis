@@ -40,10 +40,13 @@ def process(path):
         system("mv %s.pdf %s" % (aux_path, aux_path))
     print "Done compiling thesis!"
 
+    if args.clean:
+        clean()
+
 
 if __name__ == '__main__':
     if args.clean:
         clean()
-    else:
+    if args.process:
         process(args.process)
 
